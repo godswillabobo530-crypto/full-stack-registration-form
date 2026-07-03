@@ -1,3 +1,10 @@
+// Read API base from the meta tag so you can change it for production without editing code
+const API_BASE = (document.querySelector('meta[name="api-base"]') || {}).content || '';
+function apiUrl(path) {
+    if (!API_BASE) return path; // use relative path
+    return API_BASE.replace(/\/$/, '') + path;
+}
+
 const registerForm = document.getElementById("registerForm");
 const loginForm = document.getElementById("loginForm");
 const registerErrorMessage = document.getElementById("registerErrorMessage");
@@ -49,7 +56,7 @@ registerForm.addEventListener("submit", async function (event) {
         registerErrorMessage.textContent = message;
     } else {
         try {
-            const response = await fetch("http://localhost:5000/api/auth/register", {
+            const response = await fetch(apiUrl('/api/auth/register'), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password, phone })
@@ -81,7 +88,7 @@ loginForm.addEventListener("submit", async function (event) {
     }
 
     try {
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const response = await fetch(apiUrl('/api/auth/login'), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password })
