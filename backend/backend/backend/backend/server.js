@@ -6,7 +6,11 @@ const authRoutes = require("./routes/auth");
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: "*", // Allow all origins in development. For production, specify your domain
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: false
+}));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
